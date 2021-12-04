@@ -72,7 +72,9 @@ ALTER TABLE pedido CHANGE COLUMN datah datahora datetime not null;
 
 ALTER TABLE pedido_detalhe CHANGE COLUMN valor valor double not null default '0';
 
-# FAZENDO ALTERAÇÕES NO BD (EXERCÍCIO 2)
+ALTER TABLE pedido DROP hora;
+
+# FAZENDO ALTERAÇÕES NO BD (EXERCÍCIO 1)
 ALTER TABLE aluno ADD data_nascimento varchar(10);
 
 ALTER TABLE aluno CHANGE COLUMN data_nascimento nascimento date;
@@ -84,3 +86,73 @@ ALTER TABLE instrutor ADD email varchar(100);
 CREATE INDEX instrutor ON curso (instrutor);
 
 ALTER TABLE instrutor DROP email;
+
+# INSERINDO DADOS NO BD (EXERCÍCIO 2)
+INSERT INTO tipo (cod, tipo) VALUES (1, 'banco de dados');
+INSERT INTO tipo (tipo) VALUES ('Programação');
+INSERT INTO tipo (tipo) VALUES ('Modelagem de dados');
+
+INSERT INTO instrutor (cod, instrutor, telefone) VALUES (1, 'Nome1', '1111-1111');
+INSERT INTO instrutor (instrutor, telefone) VALUES ('Nome2', '1212-1212');
+
+INSERT INTO curso (cod, curso, tipo, instrutor, valor) VALUES (1, 'Java Fundamentos', 2, 2, 270);
+INSERT INTO curso (curso, tipo, instrutor, valor) VALUES ('Java Avançado', 2, 2, 330);
+INSERT INTO curso (curso, tipo, instrutor, valor) VALUES ('SQL Completo', 1, 1, 170);
+INSERT INTO curso (curso, tipo, instrutor, valor) VALUES ('Php Básico', 2, 1, 270);
+
+INSERT INTO aluno (cod, aluno, endereço, email) VALUES (1, 'Nome1', 'Rua 1', 'nome1@dominio.com.br');
+INSERT INTO aluno (aluno, endereço, email) VALUES ('Nome2', 'Rua 2', 'nome2@dominio.com.br');
+INSERT INTO aluno (aluno, endereço, email) VALUES ('Nome3', 'Rua 3', 'nome3@dominio.com.br');
+INSERT INTO aluno (aluno, endereço, email) VALUES ('Nome4', 'Rua 4', 'nome4@dominio.com.br');
+INSERT INTO aluno (aluno, endereço, email) VALUES ('Nome5', 'Rua 5', 'nome5@dominio.com.br');
+INSERT INTO aluno (aluno, endereço, email) VALUES ('Nome6', 'Rua 6', 'nome6@dominio.com.br');
+
+INSERT INTO pedido (cod, aluno, datahora) VALUES (1, 2, '2010-04-15 11:23:32');
+INSERT INTO pedido (aluno, datahora ) VALUES (2, '2010-04-15 14:36:21');
+INSERT INTO pedido (aluno, datahora ) VALUES (3, '2010-04-16 11:17:45');
+INSERT INTO pedido (aluno, datahora ) VALUES (4, '2010-04-17 14:27:22');
+INSERT INTO pedido (aluno, datahora ) VALUES (5, '2010-04-18 11:18:19');
+INSERT INTO pedido (aluno, datahora ) VALUES (6, '2010-04-19 13:47:35');
+INSERT INTO pedido (aluno, datahora ) VALUES (6, '2010-04-20 18:13:44');
+
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (1, 1, 270); 
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (1, 2, 330);
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (2, 1, 270);
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (2, 2, 330);
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (2, 3, 170);
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (3, 4, 270);
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (4, 2, 330);
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (4, 4, 270);
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (5, 3, 170);
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (6, 3, 170);
+INSERT INTO pedido_detalhe (pedido, curso, valor) VALUES (7, 4, 270);
+
+# MANIPULANDO OS DADOS
+
+SELECT * FROM aluno; 			# Exibir todas as informações de todos os alunos
+SELECT curso FROM curso;		# Exibir somente o título de cada curso
+
+# Exibir somente o título e valor de cada curso da Softblue cujo preço seja maior que 200
+SELECT curso, valor FROM curso WHERE valor > 200; 
+
+# Exibir somente o título e valor de cada curso da Softblue cujo preço seja maior que 200 e menor que 300
+SELECT curso, valor FROM curso WHERE valor > 200 and valor < 300;
+SELECT curso, valor FROM curso WHERE valor BETWEEN 200 and 330;
+
+# Exibir as informações da tabela PEDIDOS para os pedidos realizados entre 15/04/2010 e 18/04/2010
+SELECT * FROM pedido WHERE datahora > '2010-04-15' and datahora < '2010-04-19';
+SELECT * FROM pedido WHERE datahora BETWEEN '2010-04-15' and '2010-04-19';
+
+SELECT * FROM pedido WHERE date(datahora) = '2010-04-15';
+
+# ALTERANDO INFORMAÇÔES
+UPDATE aluno SET endereço = 'Av. Brasil 1111' WHERE cod = 1;
+UPDATE aluno SET email = 'name1@outrodominio.com.br' WHERE cod = 1;
+
+# Aumente em 10% o valor dos cursos abaixo de 300
+SET SQL_SAFE_UPDATES = 0;	# Necessário para permitir alterar todos os valores de uma tabela
+UPDATE curso SET valor  = ROUND(valor * 1.1, 2) WHERE valor < 300;
+
+#Altere o nome do curso de Php Básico para Php Fundamentos
+UPDATE curso SET curso = 'Php Fundamentos' WHERE curso = 'Php Básico';
+
