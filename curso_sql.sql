@@ -88,7 +88,7 @@ CREATE INDEX instrutor ON curso (instrutor);
 ALTER TABLE instrutor DROP email;
 
 # INSERINDO DADOS NO BD (EXERCÍCIO 2)
-INSERT INTO tipo (cod, tipo) VALUES (1, 'banco de dados');
+INSERT INTO tipo (cod, tipo) VALUES (1, 'Banco de dados');
 INSERT INTO tipo (tipo) VALUES ('Programação');
 INSERT INTO tipo (tipo) VALUES ('Modelagem de dados');
 
@@ -155,4 +155,30 @@ UPDATE curso SET valor  = ROUND(valor * 1.1, 2) WHERE valor < 300;
 
 #Altere o nome do curso de Php Básico para Php Fundamentos
 UPDATE curso SET curso = 'Php Fundamentos' WHERE curso = 'Php Básico';
+
+
+# RELACIONAMENTOS USANDO JOIN E CRIANDO VISÕES (EXERCÍCIO 4)
+
+# Exiba uma lista com os títulos dos cursos e o tipo de curso ao lado
+SELECT a.curso, b.tipo FROM curso a JOIN tipo b ON a.tipo = b.cod;
+
+# Exiba uma lista com os títulos dos cursos, tipo do curso, nome do instrutor responsável e telefone;
+SELECT a.curso, b.tipo, c.instrutor, c.telefone 
+FROM curso a JOIN tipo b ON a.tipo = b.cod 
+JOIN instrutor c ON c.cod = a.instrutor;
+
+# Exiba uma lista com o código e data e hora dos pedidos e os códigos dos cursos de cada pedido
+SELECT a.cod, a.datahora, b.curso FROM pedido a 
+JOIN pedido_detalhe b ON b.pedido = a.cod;
+
+# Exiba uma lista com o código e data e hora dos pedidos e os títulos dos cursos de cada pedido
+SELECT a.cod, a.datahora, c.curso FROM pedido a 
+JOIN pedido_detalhe b ON b.pedido = a.cod 
+LEFT JOIN curso c ON c.cod = b.curso;
+
+# Exiba uma lista com o código e data e hora dos pedidos, nome do aluno e os títulos dos cursos de cada pedido
+SELECT a.cod, a.datahora, b.aluno, d.curso FROM pedido a JOIN aluno b ON b.cod = a.aluno
+LEFT JOIN pedido_detalhe c ON c.pedido = a.cod
+LEFT JOIN curso d ON d.cod = c.curso;
+
 
